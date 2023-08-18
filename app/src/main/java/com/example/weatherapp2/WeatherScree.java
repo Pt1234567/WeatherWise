@@ -1,25 +1,19 @@
 package com.example.weatherapp2;
 
-import android.annotation.SuppressLint;
-import android.os.Build;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.EditText;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.example.weatherapp2.Model.Weather;
 import com.example.weatherapp2.Model.WeatherResponse;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -31,7 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class WeatherScree extends AppCompatActivity {
     TextView temp, maxTemp, minTemp, condition, day, date, wind, rain, humidity, sunrise, sunset, sea, location;
-
+    SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +53,7 @@ public class WeatherScree extends AppCompatActivity {
     }
 
     private void SearchCity() {
-        SearchView searchView=findViewById(R.id.search);
+         searchView=findViewById(R.id.search);
 
 
 
@@ -68,9 +62,13 @@ public class WeatherScree extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
               if(query!=null){
                   getWeatherForecast(query);
+                  closeKeyboard();
+                  searchView.clearFocus();
               }
               return true;
             }
+
+
 
             @Override
             public boolean onQueryTextChange(String newText) {
@@ -205,6 +203,12 @@ public class WeatherScree extends AppCompatActivity {
             e.printStackTrace();
             return "Invalid Timestamp";
         }
+    }
+
+    private void closeKeyboard(){
+        InputMethodManager inputMethodManager= (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        inputMethodManager.hideSoftInputFromWindow(searchView.getWindowToken(),0);
     }
 
 
